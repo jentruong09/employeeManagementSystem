@@ -88,9 +88,9 @@ const addEmployees = () => {
             },
             {
                 type: 'list',
-                message: "What is the employee's role?",
-                choices: ['Lead Engineer', 'Salesperson', 'Accountant', 'Junior Accountant', 'Paralegal', 'Lawyer', 'Senior Accountant', 'Sales Manager', 'Human Resource Manager', 'Human Resource Coordinator', 'Software Engineer', 'QA Engineer'],
-                name: 'title',
+                message: "What is the employee's role? (Choices 'Lead Engineer', 'Salesperson', 'Accountant', 'Junior Accountant', 'Paralegal', 'Lawyer', 'Senior Accountant', 'Sales Manager', 'Human Resource Manager', 'Human Resource Coordinator', 'Software Engineer', 'QA Engineer')",
+                choices: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+                name: 'role_id',
             },
             {
                 type: 'list',
@@ -101,7 +101,14 @@ const addEmployees = () => {
         ])
         .then((answer) => {
             // title might need to be swapped with role_id -- needs to be role_id
-            db.query(`INSERT INTO employee (first_name, last_name, title, manager_id) VALUES (?, ?, ?, ?)`, [answer.first_name, answer.last_name, answer.title, answer.manager_id], (err, result) => {
+            // const role_id = (choice) => {
+            //     if (choice.choices === 'Lead Engineer') {
+            //         role_id = 1
+            //     } if (choice.choices === 'Salesperson') {
+            //         role_id = 2
+            //     }
+            // }
+            db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answer.first_name, answer.last_name, answer.role_id , answer.manager_id], (err, result) => {
                 if (err) {
                     console.table(err);
                 }
@@ -111,6 +118,40 @@ const addEmployees = () => {
         })
 }
 
+// Did not work?? --double check
+// To update Employee Roles 
+const updateEmployeeRole = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                message: 'Which employee would you like to update? (Please enter by employee id.',
+                choices: ['1', '2', '3', '4', '5', '6', '7,', '8', '9', '10', '11', '12'],
+                name: 'id'
+            },
+            {
+                type: 'list',
+                message: 'What is their new role?',
+                choices: ['1', '2', '3', '4', '5', '6', '7,', '8', '9', '10', '11', '12'],
+                name: 'role_id'
+            }
+        ])
+        .then((answer) => {
+            db.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [answer.id, answer.role_id], (err, result) => {
+                if(err) {
+                    console.table(err);
+                }
+                console.table('Emplyee Role has updated successfully')
+                startOption();
+            })
+        })
+}
+
+
+// To view all roles
+const viewAllRoles = () => {
+    
+}
 
 
 // To call the startOption Questions
