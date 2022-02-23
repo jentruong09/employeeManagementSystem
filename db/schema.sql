@@ -27,7 +27,7 @@ CREATE TABLE employee (
     manager_id INT NULL REFERENCES id,
     PRIMARY KEY (id),
     FOREIGN KEY (role_id)
-    REFERENCES department_role(id)
+    REFERENCES department_role(id),
 );
 
 --not sure if the last few lines are correct??? Might have referenced incorrectly??
