@@ -1,14 +1,9 @@
-const express = require('express');
 // Import and require mysql2
 const mysql = require('mysql2');
 const fs = require('fs');
-
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-// Express middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+const inquirer = require('inquirer');
+const consoleTable = require('console.table');
+const { add } = require('lodash');
 
 // Connect to database
 const db = mysql.createConnection(
@@ -20,7 +15,108 @@ const db = mysql.createConnection(
     password: 'rootroot',
     database: 'company_db'
   },
-  console.log(`Connected to the company_db database.`)
+  console.table(`Connected to the company_db database.`)
 );
 
+
+// Starting Prompt -- look back at this to name all the following functions -> make changes here if any functions get changed
+const startOption = () => {
+    inquirer
+        .prompt({
+            type: 'list',
+            message: 'What would you like to do?',
+            choices: ['View All Employees', 'Add Employees', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', 'Quit'],
+            name: 'start'
+        })
+        .then((answer) => {
+            switch(answer.start) {
+                case 'View All Employees':
+                    viewAllEmployees();
+                break;
+                case 'Add Employees':
+                    addEmployees();
+                break;
+                case 'Update Employee Role':
+                    updateEmployeeRole();
+                break;
+                case 'View All Roles':
+                    viewAllRoles();
+                break;
+                case 'Add Role':
+                    addRole();
+                break;
+                case 'View All Departments':
+                    viewAllDepartments();
+                break;
+                case 'Add Department':
+                    addDepartment();
+                break;
+                // db.end to end connection? -- might have to re-google this one?
+                case 'Quit':
+                    db.end()
+                    console.table('You have ended your session. Have a great day!')
+                break;
+            }
+        })
+};
+
+
+// To view all Employees
+const viewAllEmployees = () => {
+    db.query("SELECT employee.id, employee.first_name , employee.last_name, department_role.title, department.department_name , department_role.salary , employee.manager_id FROM employee JOIN department_role ON employee.role_id = department_role.id JOIN department ON department_role.department_id = department.id;", (err, result) => {
+        if (err) {
+            console.table(err);
+        }
+        console.table(result);
+        startOption();
+    })
+}
+
+// To add Employee
+const addEmployees = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: "What is the employee's first name?",
+                name: 'first_name',
+            },
+            {
+                type: 'input',
+                message: "What is the employee's last name?",
+                name: 'last_name',
+            },
+            {
+                type: 'list',
+                message: "What is the employee's role?",
+                choices: ['Lead Engineer', 'Salesperson', 'Accountant', 'Junior Accountant', 'Paralegal', 'Lawyer', 'Senior Accountant', 'Sales Manager', 'Human Resource Manager', 'Human Resource Coordinator', 'Software Engineer', 'QA Engineer'],
+                name: 'title',
+            },
+            {
+                type: 'list',
+                message: "What is the employee's manager (by employee_id)?",
+                choices: ['1', '2', '3', '4', '5', '6', '7,', '8', '9', '10', '11', '12'],
+                name: 'manager_id',
+            }
+        ])
+        .then((answer) => {
+            // title might need to be swapped with role_id -- needs to be role_id
+            db.query(`INSERT INTO employee (first_name, last_name, title, manager_id) VALUES (?, ?, ?, ?)`, [answer.first_name, answer.last_name, answer.title, answer.manager_id], (err, result) => {
+                if (err) {
+                    console.table(err);
+                }
+                console.table('New Employee Added Sucessfully');
+                startOption();
+            })
+        })
+}
+
+
+
 // To call the startOption Questions
+function init() {
+    console.table('You have entered the Employee Management System');
+    startOption();
+}
+
+init();
