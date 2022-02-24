@@ -5,7 +5,8 @@ VALUES ('Engineering'),
        ('Finance'), 
        ('Legal'), 
        ('Sales'),
-       ('HR');
+       ('HR'),
+       ('Executive');
 
 INSERT INTO department_role (title, department_id, salary)
 VALUES ('Lead Engineer', 1, 150000), 

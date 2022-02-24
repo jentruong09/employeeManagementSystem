@@ -106,14 +106,14 @@ const addEmployees = () => {
             },
             {
                 type: 'list',
-                message: "What is the employee's role? (Choices 'Lead Engineer', 'Salesperson', 'Accountant', 'Junior Accountant', 'Paralegal', 'Lawyer', 'Senior Accountant', 'Sales Manager', 'Human Resource Manager', 'Human Resource Coordinator', 'Software Engineer', 'QA Engineer')",
+                message: "What is the employee's role? Choices(1 - Lead Engineer, 2 - Salesperson, 3 - Accountant, 4 - Junior Accountant, 5 - Paralegal, 6 - Lawyer, 7 - Senior Accountant, 8 - Sales Manager, 9 - Human Resource Manager, 10 - Human Resource Coordinator, 11 - Software Engineer, 12 - QA Engineer)",
                 choices: ['1','2','3','4','5','6','7','8','9','10','11','12'],
                 name: 'role_id',
             },
             {
                 type: 'list',
                 message: "What is the employee's manager (by employee_id)?",
-                choices: ['1', '2', '3', '4', '5', '6', '7,', '8', '9', '10', '11', '12'],
+                choices: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
                 name: 'manager_id',
             }
         ])
@@ -142,13 +142,13 @@ const updateEmployeeRole = () => {
         .prompt([
             {
                 type: 'list',
-                message: 'Which employee would you like to update? (Please enter by employee id.)',
+                message: 'Which employee would you like to update? Choices(1 - Ben Smith, 2 - Elizabeth Porter, 3 - Hailee Caffrey, 4 - Simon Lee, 5 - Jack McKay, 6 - Kevin Steinfeld, 7 - Samuel Gomez, 8 - Rose Goo, 9 - Jackson Darling, 10 - Dean Sloan, 11 - Leah Lewis, 12 - Sarah Daniels)',
                 choices: ['1', '2', '3', '4', '5', '6', '7,', '8', '9', '10', '11', '12'],
                 name: 'id'
             },
             {
                 type: 'list',
-                message: 'What is their new role?',
+                message: 'What is their new role? Choices(1 - Lead Engineer, 2 - Salesperson, 3 - Accountant, 4 - Junior Accountant, 5 - Paralegal, 6 - Lawyer, 7 - Senior Accountant, 8 - Sales Manager, 9 - Human Resource Manager, 10 - Human Resource Coordinator, 11 - Software Engineer, 12 - QA Engineer)',
                 choices: ['1', '2', '3', '4', '5', '6', '7,', '8', '9', '10', '11', '12'],
                 name: 'role_id'
             }
@@ -310,8 +310,67 @@ const viewEmployeeByDepartment = () => {
 }
 
 
-//Delete Departments
+// Delete Departments
+const deleteDepartment = () => {
+    inquirer
+        .prompt({
+            type: 'list',
+            message: "Which department would you like to delete?",
+            choices: ['Engineering', 'Finance', 'Legal', 'Sales', 'HR', 'Executive'],
+            name: 'department'
+        })
+        .then((answer) => {
+            db.query(`DELETE FROM department WHERE department_name = ?`, [answer.department_name], (err, result) => {
+                if(err){
+                    console.table(err);
+                }
+                console.table('This department has been deleted')
+                startOption();
+            })
+        })
+}
 
+
+// Delete Role
+const deleteRole = () => {
+    inquirer
+        .prompt({
+            type: 'list',
+            message: 'Which role would you like to delete?',
+            choices: ['Lead Engineer', 'Salesperson', 'Accountant', 'Junior Accountant', 'Paralegal', 'Lawyer', 'Senior Accountant', 'Sales Manager', 'Human Resource Manager', 'Human Resource Coordinator', 'Software Engineer', 'QA Engineer'],
+            name: 'title'
+        })
+        .then((answer) => {
+            db.query(`DELETE FROM department_role WHERE title = ?`, [answer.title], (err, result) => {
+                if(err){
+                    console.table(err);
+                }
+                console.table('This role has been deleted')
+                startOption();
+            })
+        })
+}
+
+
+// Delete Employee 
+const deleteEmployee = () => {
+    inquirer
+        .prompt({
+            type: 'list',
+            message: 'Which employee would you like to delete? Choices(1 - Ben Smith, 2 - Elizabeth Porter, 3 - Hailee Caffrey, 4 - Simon Lee, 5 - Jack McKay, 6 - Kevin Steinfeld, 7 - Samuel Gomez, 8 - Rose Goo, 9 - Jackson Darling, 10 - Dean Sloan, 11 - Leah Lewis, 12 - Sarah Daniels)',
+            choices: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            name: 'id'
+        })
+        .then((answer) => {
+            db.query(`DELETE FROM employee WHERE id = ?`, [answer.id], (err, result) => {
+                if(err){
+                    console.table(err);
+                }
+                console.table('This employee has been deleted')
+                startOption();
+            })
+        })
+}
 
 // To call the startOption Questions
 function init() {
