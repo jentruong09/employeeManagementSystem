@@ -112,8 +112,8 @@ const addEmployees = () => {
             },
             {
                 type: 'list',
-                message: "What is the employee's manager (by employee_id)?",
-                choices: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                message: "What is the employee's manager Choices(1 - Ben Smith, 2 - Elizabeth Porter, 7 - Samuel Gomez, 8 - Rose Goo, 11 - Leah Lewis)?",
+                choices: ['1', '2', '7', '8', '11'],
                 name: 'manager_id',
             }
         ])
@@ -337,7 +337,7 @@ const deleteRole = () => {
         .prompt({
             type: 'list',
             message: 'Which role would you like to delete?',
-            choices: ['Lead Engineer', 'Salesperson', 'Accountant', 'Junior Accountant', 'Paralegal', 'Lawyer', 'Senior Accountant', 'Sales Manager', 'Human Resource Manager', 'Human Resource Coordinator', 'Software Engineer', 'QA Engineer'],
+            choices: ['Lead Engineer', 'Salesperson', 'Accountant', 'Junior Accountant', 'Paralegal', 'Lawyer', 'Senior Accountant', 'Sales Manager', 'Human Resource Manager', 'Human Resource Coordinator', 'Software Engineer', 'QA Engineer', 'Tech'],
             name: 'title'
         })
         .then((answer) => {
