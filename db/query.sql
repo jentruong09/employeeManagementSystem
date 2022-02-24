@@ -7,5 +7,11 @@ FROM employee
 JOIN department_role ON employee.role_id = department_role.id
 JOIN department ON department_role.department_id = department.id
 
+SELECT first_name, last_name 
+FROM employee 
+JOIN department_role ON employee.role_id = department_role.id
+JOIN department ON department_role.department_id = department.id
+WHERE department_id = 2
+
 -- not sure how to make the manager name pop up instead or # - revisit
 --JOIN employee AS employee_manager ON CONCAT(employee.first_name,'', employee.last_name) = employee.manager_id;

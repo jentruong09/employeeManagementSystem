@@ -25,7 +25,7 @@ const startOption = () => {
         .prompt({
             type: 'list',
             message: 'What would you like to do?',
-            choices: ['View All Employees', 'Add Employees', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', "Update Employee's Manager", "View Employee's By Manager", 'Quit'],
+            choices: ['View All Employees', 'Add Employees', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', "Update Employee's Manager", "View Employee's By Manager","View Employee's By Department", 'Delete A Department', 'Delete A Role', 'Delete A Employee', 'Quit'],
             name: 'start'
         })
         .then((answer) => {
@@ -56,6 +56,18 @@ const startOption = () => {
                 break;
                 case "View Employee's By Manager":
                     viewEmployeeByManager();
+                break;
+                case "View Employee's By Department":
+                    viewEmployeeByDepartment();
+                break;
+                case 'Delete A Department':
+                    deleteDepartment();
+                break;
+                case 'Delete A Role':
+                    deleteRole();
+                break;
+                case 'Delete A Employee':
+                    deleteEmployee();
                 break;
                 // db.end to end connection
                 case 'Quit':
@@ -276,6 +288,30 @@ const viewEmployeeByManager = () => {
             })
         })
 }
+
+// View Employees By Department
+const viewEmployeeByDepartment = () => {
+    inquirer
+    .prompt({
+        type: 'list',
+        message: "Which department team would you like to see? Choices(1 - Engineering, 2 - Finance, 3 - Legal, 4 - Sales, 5 - HR)",
+        choices: ['1', '2', '3', '4', '5'],
+        name: 'department_id'
+    })
+    .then((answer) => {
+        db.query(`SELECT first_name, last_name FROM employee JOIN department_role ON employee.role_id = department_role.id JOIN department ON department_role.department_id = department.id WHERE department_id = ?`, [answer.department_id], (err, result) => {
+            if (err) {
+                console.table(err);
+            }
+            console.table(result);
+            startOption();
+        })
+    })
+}
+
+
+//Delete Departments
+
 
 // To call the startOption Questions
 function init() {
